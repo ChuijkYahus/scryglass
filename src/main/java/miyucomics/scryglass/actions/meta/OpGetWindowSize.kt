@@ -14,7 +14,6 @@ class OpGetWindowSize : ConstMediaAction {
 	override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
 		if (env.caster !is ServerPlayerEntity)
 			throw MishapBadCaster()
-		val window = (env.caster!! as PlayerEntityMinterface).getWindowSize()
-		return Vec3d(window.first, window.second, 0.0).asActionResult
+		return (env.caster!! as PlayerEntityMinterface).getWindowSize().asActionResult
 	}
 }

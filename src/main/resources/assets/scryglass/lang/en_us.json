@@ -4,7 +4,7 @@
 	"scryglass.page.scryglass.1": "All oculus spells take an integer henceforth referred to as an index, which will be used to refer to and distinguish $(thing)Icons$(). Using a used index in an oculus spell will destroy the old $(thing)Icon$() and reassign it to the new one.$(br2)$(o)Virtual instruments spread out in front of her like playing cards show her relative position and velocity, her airspeed and orientation, her oxygen levels, mana levels, and her degree of concentration.$()",
 	"scryglass.page.scryglass.2": "Oculus spells also typically want a position to draw to, in the form of a vector. The x and y-components of the vector I pass in are coordinates on a coordinate plane whose origin is at the center of my vision. $(l:scryglass#scryglass:get_window_size)$(action)Periphery Reflection$() can be used to determine the full range of my vision. The z-component is used to determine which $(thing)Icons$() appear over others.",
 	"hexcasting.action.scryglass:get_window_size": "Periphery Reflection",
-	"scryglass.page.get_window_size.summary": "Returns the full width and height of my vision as a vector.",
+	"scryglass.page.get_window_size.summary": "Returns the full width and height of my vision, as well as the angle of vision, as a vector.",
 	"hexcasting.action.scryglass:get_icons": "Icons Reflection",
 	"scryglass.page.get_icons.summary": "Pushes a list of the indices of all the $(thing)Icons$() I have. This appears as a list of numbers.",
 	"hexcasting.action.scryglass:remove_icon": "Clear Icon",
