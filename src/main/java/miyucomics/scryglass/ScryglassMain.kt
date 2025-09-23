@@ -42,7 +42,6 @@ class ScryglassMain : ModInitializer {
 		private val ICON_REGISTRY_KEY: RegistryKey<Registry<IconType<out Icon>>> = RegistryKey.ofRegistry(id("icon_type"))
 		val ICON_REGISTRY: SimpleRegistry<IconType<out Icon>> = FabricRegistryBuilder.createSimple(ICON_REGISTRY_KEY).attribute(RegistryAttribute.MODDED).buildAndRegister()
 
-		fun reflectY(vec: Vec3d) = Vec3d(vec.x, -vec.y, vec.z)
 		fun floatVector(vec: Vec3d) = Vector3f(vec.x.toFloat(), vec.y.toFloat(), vec.z.toFloat())
 		fun interpretColor(vec: Vec3d) = ColorHelper.Argb.getArgb(255, (vec.x * 255).toInt(), (vec.y * 255).toInt(), (vec.z * 255).toInt())
 	}

@@ -8,7 +8,6 @@ import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster
 import miyucomics.scryglass.ScryglassMain.Companion.floatVector
-import miyucomics.scryglass.ScryglassMain.Companion.reflectY
 import miyucomics.scryglass.icons.TextIcon
 import miyucomics.scryglass.icons.TextJustification
 import miyucomics.scryglass.state.PlayerEntityMinterface
@@ -21,7 +20,7 @@ class OpDrawText : ConstMediaAction {
 			throw MishapBadCaster()
 
 		val index = args.getInt(0, argc)
-		val position = reflectY(args.getVec3(1, argc))
+		val position = args.getVec3(1, argc)
 		val justify = args.getPositiveIntUnderInclusive(2, 2, argc)
 		val text = args[3].display()
 
