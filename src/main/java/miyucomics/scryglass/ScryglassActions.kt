@@ -33,6 +33,6 @@ object ScryglassActions {
 	private fun register(name: String, signature: String, startDir: HexDir, action: Action) =
 		Registry.register(
 			HexActions.REGISTRY, ScryglassMain.id(name),
-			ActionRegistryEntry(HexPattern.Companion.fromAngles(signature, startDir), action)
+			ActionRegistryEntry(HexPattern.fromAngles(signature, startDir), action)
 		)
 }
