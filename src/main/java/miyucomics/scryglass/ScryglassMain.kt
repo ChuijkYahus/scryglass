@@ -24,7 +24,7 @@ class ScryglassMain : ModInitializer {
 		Registry.register(ICON_REGISTRY, id("rect"), RectIcon.TYPE)
 
 		ServerPlayNetworking.registerGlobalReceiver(DIMENSIONS_CHANNEL) { _, player, _, buf, _ ->
-			(player as PlayerEntityMinterface).setWindowSize(Pair(buf.readInt().toDouble(), buf.readInt().toDouble()))
+			(player as PlayerEntityMinterface).setWindowSize(Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble()))
 			(player as PlayerEntityMinterface).getScryglassState().prime(player)
 		}
 
