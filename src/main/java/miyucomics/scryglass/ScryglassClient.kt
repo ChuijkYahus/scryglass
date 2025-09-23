@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.minecraft.client.MinecraftClient
+import net.minecraft.util.math.MathHelper
 
 object ScryglassClient : ClientModInitializer {
 	var previousWidth = 0
@@ -36,9 +37,9 @@ object ScryglassClient : ClientModInitializer {
 
 	private fun sendDimensions(client: MinecraftClient) {
 		ClientPlayNetworking.send(DIMENSIONS_CHANNEL, PacketByteBufs.create().apply {
-			writeInt(client.window.scaledWidth)
-			writeInt(client.window.scaledHeight)
-			writeInt(client.options.fov.value)
+			writeDouble(client.window.scaledWidth.toDouble())
+			writeDouble(client.window.scaledHeight.toDouble())
+			writeDouble(MathHelper.RADIANS_PER_DEGREE * client.options.fov.value.toDouble())
 		})
 	}
 }

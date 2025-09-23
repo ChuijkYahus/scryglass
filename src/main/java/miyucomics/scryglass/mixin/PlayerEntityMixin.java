@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,17 +18,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin implements PlayerEntityMinterface {
 	@Unique
-	private Pair<@NotNull Double, @NotNull Double> windowSize = new Pair<>(0.0, 0.0);
+	private Vec3d windowSize = Vec3d.ZERO;
 	@Unique
 	private @NotNull ScryglassState scryglassState = new ScryglassState();
 
 	@Override
-	public @NotNull Pair<@NotNull Double, @NotNull Double> getWindowSize() {
+	public @NotNull Vec3d getWindowSize() {
 		return windowSize;
 	}
 
 	@Override
-	public void setWindowSize(@NotNull Pair<@NotNull Double, @NotNull Double> size) {
+	public void setWindowSize(@NotNull Vec3d size) {
 		windowSize = size;
 	}
 
