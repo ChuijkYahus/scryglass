@@ -3,6 +3,7 @@ package miyucomics.scryglass
 import miyucomics.scryglass.icons.*
 import miyucomics.scryglass.state.PlayerEntityMinterface
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
@@ -25,6 +26,10 @@ class ScryglassMain : ModInitializer {
 		ServerPlayNetworking.registerGlobalReceiver(DIMENSIONS_CHANNEL) { _, player, _, buf, _ ->
 			(player as PlayerEntityMinterface).setWindowSize(Pair(buf.readInt().toDouble(), buf.readInt().toDouble()))
 			(player as PlayerEntityMinterface).getScryglassState().prime(player)
+		}
+
+		ServerPlayerEvents.AFTER_RESPAWN.register { old, new, _ ->
+			(old as PlayerEntityMinterface).setWindowSize((new as PlayerEntityMinterface).getWindowSize())
 		}
 	}
 
