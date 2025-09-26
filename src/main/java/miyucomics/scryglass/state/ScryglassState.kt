@@ -44,17 +44,6 @@ class ScryglassState {
 		removals.add(index)
 	}
 
-	fun tick() {
-		val iterator = frame.entries.iterator()
-		while (iterator.hasNext()) {
-			val entry = iterator.next()
-			if (entry.value.tick()) {
-				iterator.remove()
-				removals.add(entry.key)
-			}
-		}
-	}
-
 	fun prime(player: ServerPlayerEntity) {
 		val buf = PacketByteBufs.create()
 		buf.writeNbt(this.serialize())
