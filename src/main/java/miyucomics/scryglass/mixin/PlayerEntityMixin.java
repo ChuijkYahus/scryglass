@@ -40,7 +40,6 @@ public class PlayerEntityMixin implements PlayerEntityMinterface {
 	@Inject(method = "tick", at = @At("RETURN"))
 	public void updateClient(CallbackInfo ci) {
 		if (!((Entity) (Object) this).getWorld().isClient) {
-			scryglassState.tick();
 			scryglassState.push((ServerPlayerEntity) (Object) this);
 		}
 	}

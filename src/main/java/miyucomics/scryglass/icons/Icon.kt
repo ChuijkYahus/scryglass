@@ -7,15 +7,9 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.math.RotationAxis
 
 abstract class Icon(iconType: IconType<out Icon>) {
-	var age: Int = 0
 	var scale: Float = 1f
 	var rotation: Float = 0f
 	val type: IconType<out Icon> = iconType
-
-	fun tick(): Boolean {
-		age += 1
-		return age > 10
-	}
 
 	fun render(drawContext: DrawContext, deltaTime: Float) {
 		val matrices = drawContext.matrices
@@ -29,7 +23,6 @@ abstract class Icon(iconType: IconType<out Icon>) {
 
 	fun toNBT(): NbtCompound {
 		val compound = NbtCompound()
-		compound.putInt("age", age)
 		compound.putFloat("scale", scale)
 		compound.putFloat("rotation", rotation)
 		writeCustomNBT(compound)
@@ -37,7 +30,6 @@ abstract class Icon(iconType: IconType<out Icon>) {
 	}
 
 	open fun readNBT(compound: NbtCompound) {
-		age = compound.getInt("age")
 		scale = compound.getFloat("scale")
 		rotation = compound.getFloat("rotation")
 		readCustomNBT(compound)
