@@ -1,4 +1,4 @@
-package miyucomics.scryglass.actions.icons
+package miyucomics.scryglass.actions.visions
 
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
@@ -8,8 +8,8 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster
 import miyucomics.scryglass.ScryglassMain.Companion.floatVector
 import miyucomics.scryglass.ScryglassMain.Companion.interpretColor
-import miyucomics.scryglass.icons.RectIcon
 import miyucomics.scryglass.state.PlayerEntityMinterface
+import miyucomics.scryglass.visions.RectVision
 import net.minecraft.server.network.ServerPlayerEntity
 
 class OpDrawRect : ConstMediaAction {
@@ -24,7 +24,7 @@ class OpDrawRect : ConstMediaAction {
 		val color = interpretColor(args.getVec3(3, argc))
 
 		val scryglassState = (env.caster!! as PlayerEntityMinterface).getScryglassState()
-		scryglassState.setIcon(index, RectIcon(position, size, color))
+		scryglassState.setVision(index, RectVision(position, size, color))
 		return emptyList()
 	}
 }

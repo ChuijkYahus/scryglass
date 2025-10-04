@@ -1,4 +1,4 @@
-package miyucomics.scryglass.icons
+package miyucomics.scryglass.visions
 
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.RenderLayer
@@ -6,7 +6,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.nbt.NbtCompound
 import org.joml.Vector3f
 
-class LineIcon(iconType: IconType<LineIcon>) : Icon(iconType) {
+class LineVision(visionType: VisionType<LineVision>) : Vision(visionType) {
 	private lateinit var a: Vector3f
 	private lateinit var b: Vector3f
 	private var color: Int = 0
@@ -57,6 +57,6 @@ class LineIcon(iconType: IconType<LineIcon>) : Icon(iconType) {
 	}
 
 	companion object {
-		val TYPE = iconType(::LineIcon)
+		val TYPE = visionType(::LineVision)
 	}
 }

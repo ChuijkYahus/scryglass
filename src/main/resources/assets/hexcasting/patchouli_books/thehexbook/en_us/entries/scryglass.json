@@ -26,19 +26,19 @@
 		},
 		{
 			"type": "hexcasting:pattern",
-			"op_id": "scryglass:get_icons",
-			"anchor": "scryglass:get_icons",
+			"op_id": "scryglass:get_visions",
+			"anchor": "scryglass:get_visions",
 			"input": "",
 			"output": "list of indices",
-			"text": "scryglass.page.get_icons.summary"
+			"text": "scryglass.page.get_visions.summary"
 		},
 		{
 			"type": "hexcasting:pattern",
-			"op_id": "scryglass:remove_icon",
-			"anchor": "scryglass:remove_icon",
+			"op_id": "scryglass:remove_vision",
+			"anchor": "scryglass:remove_vision",
 			"input": "index",
 			"output": "",
-			"text": "scryglass.page.remove_icon.summary"
+			"text": "scryglass.page.remove_vision.summary"
 		},
 		{
 			"type": "hexcasting:pattern",
@@ -54,19 +54,19 @@
 		},
 		{
 			"type": "hexcasting:pattern",
-			"op_id": "scryglass:rotate_icon",
-			"anchor": "scryglass:rotate_icon",
+			"op_id": "scryglass:rotate_vision",
+			"anchor": "scryglass:rotate_vision",
 			"input": "index, number",
 			"output": "",
-			"text": "scryglass.page.rotate_icon.summary"
+			"text": "scryglass.page.rotate_vision.summary"
 		},
 		{
 			"type": "hexcasting:pattern",
-			"op_id": "scryglass:scale_icon",
-			"anchor": "scryglass:scale_icon",
+			"op_id": "scryglass:scale_vision",
+			"anchor": "scryglass:scale_vision",
 			"input": "index, number",
 			"output": "",
-			"text": "scryglass.page.scale_icon.summary"
+			"text": "scryglass.page.scale_vision.summary"
 		},
 		{
 			"type": "hexcasting:pattern",

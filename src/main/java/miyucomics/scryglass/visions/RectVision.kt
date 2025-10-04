@@ -1,4 +1,4 @@
-package miyucomics.scryglass.icons
+package miyucomics.scryglass.visions
 
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.RenderLayer
@@ -6,7 +6,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.nbt.NbtCompound
 import org.joml.Vector3f
 
-class RectIcon(iconType: IconType<RectIcon>) : Icon(iconType) {
+class RectVision(visionType: VisionType<RectVision>) : Vision(visionType) {
 	private lateinit var position: Vector3f
 	private lateinit var size: Vector3f
 	private var color: Int = 0
@@ -46,6 +46,6 @@ class RectIcon(iconType: IconType<RectIcon>) : Icon(iconType) {
 	}
 
 	companion object {
-		val TYPE = iconType(::RectIcon)
+		val TYPE = visionType(::RectVision)
 	}
 }

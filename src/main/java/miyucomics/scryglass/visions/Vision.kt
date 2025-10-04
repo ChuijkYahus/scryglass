@@ -1,4 +1,4 @@
-package miyucomics.scryglass.icons
+package miyucomics.scryglass.visions
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
@@ -6,10 +6,10 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.math.RotationAxis
 
-abstract class Icon(iconType: IconType<out Icon>) {
+abstract class Vision(visionType: VisionType<out Vision>) {
 	var scale: Float = 1f
 	var rotation: Float = 0f
-	val type: IconType<out Icon> = iconType
+	val type: VisionType<out Vision> = visionType
 
 	fun render(drawContext: DrawContext, deltaTime: Float) {
 		val matrices = drawContext.matrices
@@ -40,8 +40,8 @@ abstract class Icon(iconType: IconType<out Icon>) {
 	protected abstract fun renderCustom(matrices: MatrixStack, drawContext: DrawContext, deltaTime: Float)
 }
 
-fun <T> iconType(factory: (IconType<T>) -> T): IconType<T> where T : Icon {
-	return object : IconType<T> {
+fun <T> visionType(factory: (VisionType<T>) -> T): VisionType<T> where T : Vision {
+	return object : VisionType<T> {
 		override fun fromNBT(compound: NbtCompound): T {
 			val instance = factory(this)
 			instance.readNBT(compound)
@@ -50,6 +50,6 @@ fun <T> iconType(factory: (IconType<T>) -> T): IconType<T> where T : Icon {
 	}
 }
 
-interface IconType<T : Icon> {
+interface VisionType<T : Vision> {
 	fun fromNBT(compound: NbtCompound): T
 }
