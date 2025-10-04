@@ -6,9 +6,9 @@ import at.petrak.hexcasting.api.casting.getInt
 import at.petrak.hexcasting.api.casting.getPositiveIntUnderInclusive
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster
-import miyucomics.scryglass.icons.TextIcon
-import miyucomics.scryglass.icons.TextJustification
 import miyucomics.scryglass.state.PlayerEntityMinterface
+import miyucomics.scryglass.visions.TextJustification
+import miyucomics.scryglass.visions.TextVision
 import net.minecraft.server.network.ServerPlayerEntity
 
 class OpJustifyText : ConstMediaAction {
@@ -18,9 +18,9 @@ class OpJustifyText : ConstMediaAction {
 			throw MishapBadCaster()
 		val scryglassState = (env.caster!! as PlayerEntityMinterface).getScryglassState()
 		val index = args.getInt(0, argc)
-		val icon = scryglassState.get(index)
-		if (icon is TextIcon)
-			scryglassState.setIcon(index, TextIcon(icon.text, icon.position, enumValues<TextJustification>()[args.getPositiveIntUnderInclusive(1, 2, argc)]))
+		val vision = scryglassState.get(index)
+		if (vision is TextVision)
+			scryglassState.setVision(index, TextVision(vision.text, vision.position, enumValues<TextJustification>()[args.getPositiveIntUnderInclusive(1, 2, argc)]))
 		return emptyList()
 	}
 }

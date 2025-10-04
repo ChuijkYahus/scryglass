@@ -1,6 +1,5 @@
 package miyucomics.scryglass
 
-import at.petrak.hexcasting.api.mod.HexConfig.client
 import miyucomics.scryglass.ScryglassMain.Companion.DIMENSIONS_CHANNEL
 import miyucomics.scryglass.state.ClientManager
 import net.fabricmc.api.ClientModInitializer

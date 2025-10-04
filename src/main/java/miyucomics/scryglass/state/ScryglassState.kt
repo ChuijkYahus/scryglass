@@ -2,8 +2,8 @@ package miyucomics.scryglass.state
 
 import at.petrak.hexcasting.api.utils.asCompound
 import miyucomics.scryglass.ScryglassMain
-import miyucomics.scryglass.ScryglassMain.Companion.ICON_REGISTRY
-import miyucomics.scryglass.icons.Icon
+import miyucomics.scryglass.ScryglassMain.Companion.VISION_REGISTRY
+import miyucomics.scryglass.visions.Vision
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.nbt.NbtCompound
@@ -14,31 +14,31 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 
 class ScryglassState {
-	private val frame: MutableMap<Int, Icon>
-	private val additions: MutableMap<Int, Icon> = mutableMapOf()
+	private val frame: MutableMap<Int, Vision>
+	private val additions: MutableMap<Int, Vision> = mutableMapOf()
 	private val removals: MutableList<Int> = mutableListOf()
 
 	constructor() : this(mutableMapOf())
 
-	constructor(frame: Map<Int, Icon>) {
+	constructor(frame: Map<Int, Vision>) {
 		this.frame = frame.toMutableMap()
 	}
 
-	fun peek(): MutableMap<Int, Icon> {
+	fun peek(): MutableMap<Int, Vision> {
 		return frame
 	}
 
-	fun get(index: Int): Icon? {
+	fun get(index: Int): Vision? {
 		return frame[index]
 	}
 
-	fun setIcon(index: Int, icon: Icon) {
-		frame[index] = icon
-		additions[index] = icon
+	fun setVision(index: Int, vision: Vision) {
+		frame[index] = vision
+		additions[index] = vision
 		removals.remove(index)
 	}
 
-	fun removeIcon(index: Int) {
+	fun removeVision(index: Int) {
 		frame.remove(index)
 		additions.remove(index)
 		removals.add(index)
@@ -57,11 +57,11 @@ class ScryglassState {
 		val deltaNbt = NbtCompound()
 
 		val addedList = NbtList()
-		for ((index, icon) in additions) {
-			val iconNbt = icon.toNBT()
-			iconNbt.putInt("index", index)
-			iconNbt.putString("type", ICON_REGISTRY.getId(icon.type)!!.toString())
-			addedList.add(iconNbt)
+		for ((index, vision) in additions) {
+			val visionNbt = vision.toNBT()
+			visionNbt.putInt("index", index)
+			visionNbt.putString("type", VISION_REGISTRY.getId(vision.type)!!.toString())
+			addedList.add(visionNbt)
 		}
 		deltaNbt.put("added", addedList)
 
@@ -84,27 +84,27 @@ class ScryglassState {
 	fun serialize(): NbtCompound {
 		val compound = NbtCompound()
 		val list = NbtList()
-		for ((index, icon) in frame) {
-			val iconNbt = icon.toNBT()
-			iconNbt.putInt("index", index)
-			iconNbt.putString("type", ICON_REGISTRY.getId(icon.type)!!.toString())
-			list.add(iconNbt)
+		for ((index, vision) in frame) {
+			val visionNbt = vision.toNBT()
+			visionNbt.putInt("index", index)
+			visionNbt.putString("type", VISION_REGISTRY.getId(vision.type)!!.toString())
+			list.add(visionNbt)
 		}
-		compound.put("icons", list)
+		compound.put("visions", list)
 		return compound
 	}
 
 	companion object {
 		@JvmStatic
 		fun deserialize(compound: NbtCompound): ScryglassState {
-			val frame = mutableMapOf<Int, Icon>()
-			val iconsNbt = compound.getList("icons", NbtElement.COMPOUND_TYPE.toInt())
-			for (element in iconsNbt) {
-				val iconNbt = element.asCompound
-				val typeId = Identifier(iconNbt.getString("type"))
-				val type = ICON_REGISTRY.get(typeId) ?: continue
-				val index = iconNbt.getInt("index")
-				frame[index] = type.fromNBT(iconNbt)
+			val frame = mutableMapOf<Int, Vision>()
+			val visionNbt = compound.getList("visions", NbtElement.COMPOUND_TYPE.toInt())
+			for (element in visionNbt) {
+				val visionNbt = element.asCompound
+				val typeId = Identifier(visionNbt.getString("type"))
+				val type = VISION_REGISTRY.get(typeId) ?: continue
+				val index = visionNbt.getInt("index")
+				frame[index] = type.fromNBT(visionNbt)
 			}
 			return ScryglassState(frame)
 		}

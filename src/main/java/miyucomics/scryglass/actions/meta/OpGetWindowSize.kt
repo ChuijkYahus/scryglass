@@ -6,14 +6,8 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster
 import miyucomics.scryglass.state.PlayerEntityMinterface
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.math.Vec3d
 
 class OpGetWindowSize : ConstMediaAction {
 	override val argc = 0
-	override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-		if (env.caster !is ServerPlayerEntity)
-			throw MishapBadCaster()
-		return (env.caster!! as PlayerEntityMinterface).getWindowSize().asActionResult
-	}
+	override fun execute(args: List<Iota>, env: CastingEnvironment) = (env.castingEntity as? PlayerEntityMinterface ?: throw MishapBadCaster()).getWindowSize().asActionResult
 }

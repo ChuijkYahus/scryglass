@@ -1,6 +1,5 @@
 package miyucomics.scryglass.mixin;
 
-import kotlin.Pair;
 import miyucomics.scryglass.state.PlayerEntityMinterface;
 import miyucomics.scryglass.state.ScryglassState;
 import net.minecraft.entity.Entity;
@@ -46,11 +45,11 @@ public class PlayerEntityMixin implements PlayerEntityMinterface {
 
 	@Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
 	public void saveData(NbtCompound nbtCompound, CallbackInfo ci) {
-		nbtCompound.put("icons", scryglassState.serialize());
+		nbtCompound.put("visions", scryglassState.serialize());
 	}
 
 	@Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
 	public void readData(NbtCompound nbtCompound, CallbackInfo ci) {
-		scryglassState = ScryglassState.deserialize(nbtCompound.getCompound("icons"));
+		scryglassState = ScryglassState.deserialize(nbtCompound.getCompound("visions"));
 	}
 }

@@ -1,4 +1,4 @@
-package miyucomics.scryglass.icons
+package miyucomics.scryglass.visions
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
@@ -7,7 +7,7 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.Text
 import org.joml.Vector3f
 
-class TextIcon(iconType: IconType<TextIcon>) : Icon(iconType) {
+class TextVision(visionType: VisionType<TextVision>) : Vision(visionType) {
 	lateinit var text: Text
 	lateinit var position: Vector3f
 	lateinit var justification: TextJustification
@@ -45,7 +45,7 @@ class TextIcon(iconType: IconType<TextIcon>) : Icon(iconType) {
 	}
 
 	companion object {
-		val TYPE = iconType(::TextIcon)
+		val TYPE = visionType(::TextVision)
 	}
 }
 
