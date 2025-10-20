@@ -8,25 +8,15 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtElement
-import net.minecraft.nbt.NbtInt
 import net.minecraft.nbt.NbtList
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 
-class ScryglassState {
-	private val frame: MutableMap<Int, Vision>
+class ScryglassState(val frame: MutableMap<Int, Vision>) {
 	private val additions: MutableMap<Int, Vision> = mutableMapOf()
 	private val removals: MutableList<Int> = mutableListOf()
 
 	constructor() : this(mutableMapOf())
-
-	constructor(frame: Map<Int, Vision>) {
-		this.frame = frame.toMutableMap()
-	}
-
-	fun peek(): MutableMap<Int, Vision> {
-		return frame
-	}
 
 	fun get(index: Int): Vision? {
 		return frame[index]
@@ -46,7 +36,11 @@ class ScryglassState {
 
 	fun prime(player: ServerPlayerEntity) {
 		val buf = PacketByteBufs.create()
-		buf.writeNbt(this.serialize())
+		buf.writeInt(frame.size)
+		frame.forEach { (index, vision) ->
+			buf.writeInt(index)
+			vision.writeToBuf(buf)
+		}
 		ServerPlayNetworking.send(player, ScryglassMain.PRIMER_CHANNEL, buf)
 	}
 
@@ -54,27 +48,17 @@ class ScryglassState {
 		if (additions.isEmpty() && removals.isEmpty())
 			return
 
-		val deltaNbt = NbtCompound()
-
-		val addedList = NbtList()
-		for ((index, vision) in additions) {
-			val visionNbt = vision.toNBT()
-			visionNbt.putInt("index", index)
-			visionNbt.putString("type", VISION_REGISTRY.getId(vision.type)!!.toString())
-			addedList.add(visionNbt)
+		val buf = PacketByteBufs.create().apply {
+			writeInt(removals.size)
+			removals.forEach(::writeInt)
+			writeInt(additions.size)
 		}
-		deltaNbt.put("added", addedList)
 
-		val removedList = NbtList()
-		for (index in removals) {
-			removedList.add(NbtInt.of(index))
+		additions.forEach { (index, vision) ->
+			buf.writeInt(index)
+			vision.writeToBuf(buf)
 		}
-		deltaNbt.put("removed", removedList)
 
-		val buf = PacketByteBufs.create()
-		val wrapper = NbtCompound()
-		wrapper.put("deltas", deltaNbt)
-		buf.writeNbt(wrapper)
 		ServerPlayNetworking.send(player, ScryglassMain.UPDATE_CHANNEL, buf)
 
 		additions.clear()

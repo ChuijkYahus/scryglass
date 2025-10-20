@@ -1,9 +1,12 @@
 package miyucomics.scryglass.visions
 
+import miyucomics.scryglass.ScryglassMain
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.RotationAxis
 
 abstract class Vision(visionType: VisionType<out Vision>) {
@@ -22,9 +25,10 @@ abstract class Vision(visionType: VisionType<out Vision>) {
 	}
 
 	fun toNBT(): NbtCompound {
-		val compound = NbtCompound()
-		compound.putFloat("scale", scale)
-		compound.putFloat("rotation", rotation)
+		val compound = NbtCompound().apply {
+			putFloat("scale", scale)
+			putFloat("rotation", rotation)
+		}
 		writeCustomNBT(compound)
 		return compound
 	}
@@ -35,13 +39,31 @@ abstract class Vision(visionType: VisionType<out Vision>) {
 		readCustomNBT(compound)
 	}
 
+	fun writeToBuf(buf: PacketByteBuf) {
+		buf.writeIdentifier(this.type.identifier)
+		buf.writeNbt(NbtCompound().apply(::writeCustomNBT))
+		buf.writeFloat(this.scale)
+		buf.writeFloat(this.rotation)
+	}
+
 	protected abstract fun writeCustomNBT(compound: NbtCompound)
 	protected abstract fun readCustomNBT(compound: NbtCompound)
 	protected abstract fun renderCustom(matrices: MatrixStack, drawContext: DrawContext, deltaTime: Float)
+
+	companion object {
+		fun createFromBuf(buf: PacketByteBuf): Vision {
+			val type = ScryglassMain.VISION_REGISTRY.get(buf.readIdentifier())
+			val instance = type!!.fromNBT(buf.readNbt()!!)
+			instance.scale = buf.readFloat()
+			instance.rotation = buf.readFloat()
+			return instance
+		}
+	}
 }
 
-fun <T> visionType(factory: (VisionType<T>) -> T): VisionType<T> where T : Vision {
+fun <T> visionType(factory: (VisionType<T>) -> T, identifier: Identifier): VisionType<T> where T : Vision {
 	return object : VisionType<T> {
+		override val identifier = identifier
 		override fun fromNBT(compound: NbtCompound): T {
 			val instance = factory(this)
 			instance.readNBT(compound)
@@ -51,5 +73,6 @@ fun <T> visionType(factory: (VisionType<T>) -> T): VisionType<T> where T : Visio
 }
 
 interface VisionType<T : Vision> {
+	val identifier: Identifier
 	fun fromNBT(compound: NbtCompound): T
 }

@@ -44,12 +44,12 @@ public class PlayerEntityMixin implements PlayerEntityMinterface {
 	}
 
 	@Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
-	public void saveData(NbtCompound nbtCompound, CallbackInfo ci) {
-		nbtCompound.put("visions", scryglassState.serialize());
+	public void saveData(NbtCompound compound, CallbackInfo ci) {
+		compound.put("visions", scryglassState.serialize());
 	}
 
 	@Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
-	public void readData(NbtCompound nbtCompound, CallbackInfo ci) {
-		scryglassState = ScryglassState.deserialize(nbtCompound.getCompound("visions"));
+	public void readData(NbtCompound compound, CallbackInfo ci) {
+		scryglassState = ScryglassState.deserialize(compound.getCompound("visions"));
 	}
 }

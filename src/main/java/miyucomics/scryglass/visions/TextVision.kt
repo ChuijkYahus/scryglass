@@ -1,5 +1,6 @@
 package miyucomics.scryglass.visions
 
+import miyucomics.scryglass.ScryglassMain.Companion.id
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.util.math.MatrixStack
@@ -45,7 +46,7 @@ class TextVision(visionType: VisionType<TextVision>) : Vision(visionType) {
 	}
 
 	companion object {
-		val TYPE = visionType(::TextVision)
+		val TYPE = visionType(::TextVision, id("text"))
 	}
 }
 

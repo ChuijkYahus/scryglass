@@ -19,9 +19,9 @@ class ScryglassMain : ModInitializer {
 	override fun onInitialize() {
 		ScryglassActions.init()
 
-		Registry.register(VISION_REGISTRY, id("line"), LineVision.TYPE)
-		Registry.register(VISION_REGISTRY, id("text"), TextVision.TYPE)
-		Registry.register(VISION_REGISTRY, id("rect"), RectVision.TYPE)
+		registerVisionType(LineVision.TYPE)
+		registerVisionType(TextVision.TYPE)
+		registerVisionType(RectVision.TYPE)
 
 		ServerPlayNetworking.registerGlobalReceiver(DIMENSIONS_CHANNEL) { _, player, _, buf, _ ->
 			(player as PlayerEntityMinterface).setWindowSize(Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble()))
@@ -31,6 +31,10 @@ class ScryglassMain : ModInitializer {
 		ServerPlayerEvents.AFTER_RESPAWN.register { old, new, _ ->
 			(old as PlayerEntityMinterface).setWindowSize((new as PlayerEntityMinterface).getWindowSize())
 		}
+	}
+
+	fun registerVisionType(type: VisionType<*>) {
+		Registry.register(VISION_REGISTRY, type.identifier, type)
 	}
 
 	companion object {
