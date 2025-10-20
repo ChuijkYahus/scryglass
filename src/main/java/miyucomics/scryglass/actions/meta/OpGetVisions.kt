@@ -15,6 +15,6 @@ class OpGetVisions : ConstMediaAction {
 		if (env.caster !is ServerPlayerEntity)
 			throw MishapBadCaster()
 		val scryglassState = (env.caster!! as PlayerEntityMinterface).getScryglassState()
-		return scryglassState.peek().map { DoubleIota(it.key.toDouble()) }.asActionResult
+		return scryglassState.frame.map { DoubleIota(it.key.toDouble()) }.asActionResult
 	}
 }

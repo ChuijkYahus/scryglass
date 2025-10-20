@@ -1,5 +1,6 @@
 package miyucomics.scryglass.visions
 
+import miyucomics.scryglass.ScryglassMain.Companion.id
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.util.math.MatrixStack
@@ -46,6 +47,6 @@ class RectVision(visionType: VisionType<RectVision>) : Vision(visionType) {
 	}
 
 	companion object {
-		val TYPE = visionType(::RectVision)
+		val TYPE = visionType(::RectVision, id("rect"))
 	}
 }
