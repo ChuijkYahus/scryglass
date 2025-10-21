@@ -5,6 +5,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.text.Text
 import org.joml.Vector3f
 
@@ -31,7 +32,7 @@ class TextVision(visionType: VisionType<TextVision>) : Vision(visionType) {
 		drawContext.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, text, position.x.toInt() - xOffset, position.y.toInt() - height / 2, 0xff_ffffff.toInt())
 	}
 
-	override fun writeCustomNBT(compound: NbtCompound) {
+	override fun writeNBTCustom(compound: NbtCompound) {
 		compound.putString("text", Text.Serializer.toJson(text))
 		compound.putFloat("x", position.x)
 		compound.putFloat("y", position.y)
@@ -39,10 +40,22 @@ class TextVision(visionType: VisionType<TextVision>) : Vision(visionType) {
 		compound.putInt("justification", justification.ordinal)
 	}
 
-	override fun readCustomNBT(compound: NbtCompound) {
+	override fun readNBTCustom(compound: NbtCompound) {
 		text = Text.Serializer.fromJson(compound.getString("text"))!!
 		position = Vector3f(compound.getFloat("x"), compound.getFloat("y"), compound.getFloat("z"))
 		justification = enumValues<TextJustification>()[compound.getInt("justification")]
+	}
+
+	override fun writeBufCustom(buf: PacketByteBuf) {
+		buf.writeText(text)
+		buf.writeVector3f(position)
+		buf.writeEnumConstant(justification)
+	}
+
+	override fun readBufCustom(buf: PacketByteBuf) {
+		text = buf.readText()
+		position = buf.readVector3f()
+		justification = buf.readEnumConstant(TextJustification::class.java)
 	}
 
 	companion object {

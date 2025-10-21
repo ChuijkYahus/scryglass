@@ -5,6 +5,7 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.network.PacketByteBuf
 import org.joml.Vector3f
 
 class RectVision(visionType: VisionType<RectVision>) : Vision(visionType) {
@@ -30,7 +31,7 @@ class RectVision(visionType: VisionType<RectVision>) : Vision(visionType) {
 		drawContext.draw()
 	}
 
-	override fun writeCustomNBT(compound: NbtCompound) {
+	override fun writeNBTCustom(compound: NbtCompound) {
 		compound.putFloat("x", position.x)
 		compound.putFloat("y", position.y)
 		compound.putFloat("z", position.z)
@@ -40,10 +41,22 @@ class RectVision(visionType: VisionType<RectVision>) : Vision(visionType) {
 		compound.putInt("color", color)
 	}
 
-	override fun readCustomNBT(compound: NbtCompound) {
+	override fun readNBTCustom(compound: NbtCompound) {
 		position = Vector3f(compound.getFloat("x"), compound.getFloat("y"), compound.getFloat("z"))
 		size = Vector3f(compound.getFloat("width"), compound.getFloat("height"), compound.getFloat("depth"))
 		color = compound.getInt("color")
+	}
+
+	override fun writeBufCustom(buf: PacketByteBuf) {
+		buf.writeVector3f(position)
+		buf.writeVector3f(size)
+		buf.writeInt(color)
+	}
+
+	override fun readBufCustom(buf: PacketByteBuf) {
+		position = buf.readVector3f()
+		size = buf.readVector3f()
+		color = buf.readInt()
 	}
 
 	companion object {
