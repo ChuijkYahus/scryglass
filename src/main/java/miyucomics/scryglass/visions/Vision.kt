@@ -1,6 +1,6 @@
 package miyucomics.scryglass.visions
 
-import miyucomics.scryglass.ScryglassMain
+import miyucomics.scryglass.ScryglassMain.Companion.VISION_REGISTRY
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.util.math.MatrixStack
@@ -9,10 +9,9 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.RotationAxis
 
-abstract class Vision(visionType: VisionType<out Vision>) {
+abstract class Vision(val type: VisionType<out Vision>) {
 	var scale: Float = 1f
 	var rotation: Float = 0f
-	val type: VisionType<out Vision> = visionType
 
 	fun render(drawContext: DrawContext, deltaTime: Float) {
 		val matrices = drawContext.matrices
@@ -24,39 +23,38 @@ abstract class Vision(visionType: VisionType<out Vision>) {
 		matrices.pop()
 	}
 
-	fun toNBT(): NbtCompound {
-		val compound = NbtCompound().apply {
-			putFloat("scale", scale)
-			putFloat("rotation", rotation)
-		}
-		writeCustomNBT(compound)
-		return compound
-	}
-
-	open fun readNBT(compound: NbtCompound) {
-		scale = compound.getFloat("scale")
-		rotation = compound.getFloat("rotation")
-		readCustomNBT(compound)
+	fun writeToCompound(compound: NbtCompound) {
+		compound.putFloat("scale", this.scale)
+		compound.putFloat("rotation", this.rotation)
+		writeNBTCustom(compound)
 	}
 
 	fun writeToBuf(buf: PacketByteBuf) {
 		buf.writeIdentifier(this.type.identifier)
-		buf.writeNbt(NbtCompound().apply(::writeCustomNBT))
 		buf.writeFloat(this.scale)
 		buf.writeFloat(this.rotation)
+		writeBufCustom(buf)
 	}
 
-	protected abstract fun writeCustomNBT(compound: NbtCompound)
-	protected abstract fun readCustomNBT(compound: NbtCompound)
-	protected abstract fun renderCustom(matrices: MatrixStack, drawContext: DrawContext, deltaTime: Float)
+	abstract fun renderCustom(matrices: MatrixStack, drawContext: DrawContext, deltaTime: Float)
+
+	abstract fun writeNBTCustom(compound: NbtCompound)
+	abstract fun readNBTCustom(compound: NbtCompound)
+
+	abstract fun writeBufCustom(buf: PacketByteBuf)
+	abstract fun readBufCustom(buf: PacketByteBuf)
 
 	companion object {
-		fun createFromBuf(buf: PacketByteBuf): Vision {
-			val type = ScryglassMain.VISION_REGISTRY.get(buf.readIdentifier())
-			val instance = type!!.fromNBT(buf.readNbt()!!)
-			instance.scale = buf.readFloat()
-			instance.rotation = buf.readFloat()
-			return instance
+		fun createFromNbt(compound: NbtCompound) = VISION_REGISTRY.get(Identifier(compound.getString("type")))!!.create().apply {
+			this.scale = compound.getFloat("scale")
+			this.rotation = compound.getFloat("rotation")
+			this.readNBTCustom(compound)
+		}
+
+		fun createFromBuf(buf: PacketByteBuf) = VISION_REGISTRY.get(buf.readIdentifier())!!.create().apply {
+			this.scale = buf.readFloat()
+			this.rotation = buf.readFloat()
+			this.readBufCustom(buf)
 		}
 	}
 }
@@ -64,15 +62,11 @@ abstract class Vision(visionType: VisionType<out Vision>) {
 fun <T> visionType(factory: (VisionType<T>) -> T, identifier: Identifier): VisionType<T> where T : Vision {
 	return object : VisionType<T> {
 		override val identifier = identifier
-		override fun fromNBT(compound: NbtCompound): T {
-			val instance = factory(this)
-			instance.readNBT(compound)
-			return instance
-		}
+		override fun create() = factory(this)
 	}
 }
 
 interface VisionType<T : Vision> {
 	val identifier: Identifier
-	fun fromNBT(compound: NbtCompound): T
+	fun create(): T
 }

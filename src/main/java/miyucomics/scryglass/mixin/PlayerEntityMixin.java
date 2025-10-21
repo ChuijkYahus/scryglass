@@ -5,6 +5,7 @@ import miyucomics.scryglass.state.ScryglassState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
@@ -50,6 +51,6 @@ public class PlayerEntityMixin implements PlayerEntityMinterface {
 
 	@Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
 	public void readData(NbtCompound compound, CallbackInfo ci) {
-		scryglassState = ScryglassState.deserialize(compound.getCompound("visions"));
+		scryglassState = ScryglassState.deserialize(compound.getList("visions", NbtElement.COMPOUND_TYPE));
 	}
 }
