@@ -1,4 +1,4 @@
-package miyucomics.scryglass.state
+package miyucomics.scryglass.misc
 
 import net.minecraft.util.math.Vec3d
 
