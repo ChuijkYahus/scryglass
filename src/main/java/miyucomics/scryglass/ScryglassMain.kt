@@ -1,11 +1,13 @@
 package miyucomics.scryglass
 
-import miyucomics.scryglass.state.PlayerEntityMinterface
+import miyucomics.scryglass.misc.PlayerEntityMinterface
+import miyucomics.scryglass.misc.ScryglassActions
 import miyucomics.scryglass.visions.*
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
@@ -23,9 +25,12 @@ class ScryglassMain : ModInitializer {
 		registerVisionType(TextVision.TYPE)
 		registerVisionType(RectVision.TYPE)
 
+		ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
+			(handler.player as PlayerEntityMinterface).getScryglassState().prime(handler.player)
+		}
+
 		ServerPlayNetworking.registerGlobalReceiver(DIMENSIONS_CHANNEL) { _, player, _, buf, _ ->
 			(player as PlayerEntityMinterface).setWindowSize(Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble()))
-			(player as PlayerEntityMinterface).getScryglassState().prime(player)
 		}
 
 		ServerPlayerEvents.AFTER_RESPAWN.register { old, new, _ ->
@@ -38,7 +43,7 @@ class ScryglassMain : ModInitializer {
 	}
 
 	companion object {
-		val VISION_REGISTRY: SimpleRegistry<VisionType<out Vision>> = FabricRegistryBuilder.createSimple<VisionType<out Vision>>(RegistryKey.ofRegistry(id("visions"))).attribute(RegistryAttribute.MODDED).buildAndRegister()
+		val VISION_REGISTRY: SimpleRegistry<VisionType<out AbstractVision>> = FabricRegistryBuilder.createSimple<VisionType<out AbstractVision>>(RegistryKey.ofRegistry(id("visions"))).attribute(RegistryAttribute.MODDED).buildAndRegister()
 
 		fun id(string: String) = Identifier("scryglass", string)
 		val DIMENSIONS_CHANNEL = id("dimensions")

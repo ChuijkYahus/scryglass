@@ -9,7 +9,7 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.RotationAxis
 
-abstract class Vision(val type: VisionType<out Vision>) {
+abstract class AbstractVision(val type: VisionType<out AbstractVision>) {
 	var scale: Float = 1f
 	var rotation: Float = 0f
 
@@ -59,14 +59,14 @@ abstract class Vision(val type: VisionType<out Vision>) {
 	}
 }
 
-fun <T> visionType(factory: (VisionType<T>) -> T, identifier: Identifier): VisionType<T> where T : Vision {
+fun <T> visionType(factory: (VisionType<T>) -> T, identifier: Identifier): VisionType<T> where T : AbstractVision {
 	return object : VisionType<T> {
 		override val identifier = identifier
 		override fun create() = factory(this)
 	}
 }
 
-interface VisionType<T : Vision> {
+interface VisionType<T : AbstractVision> {
 	val identifier: Identifier
 	fun create(): T
 }

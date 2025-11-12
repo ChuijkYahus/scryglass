@@ -9,7 +9,7 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.text.Text
 import org.joml.Vector3f
 
-class TextVision(visionType: VisionType<TextVision>) : Vision(visionType) {
+class TextVision(visionType: VisionType<TextVision>) : AbstractVision(visionType) {
 	lateinit var text: Text
 	lateinit var position: Vector3f
 	lateinit var justification: TextJustification

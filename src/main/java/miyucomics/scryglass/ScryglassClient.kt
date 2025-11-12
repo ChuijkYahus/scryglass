@@ -1,7 +1,7 @@
 package miyucomics.scryglass
 
 import miyucomics.scryglass.ScryglassMain.Companion.DIMENSIONS_CHANNEL
-import miyucomics.scryglass.state.ClientManager
+import miyucomics.scryglass.misc.ClientManager
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents

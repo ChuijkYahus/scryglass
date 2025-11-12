@@ -1,7 +1,7 @@
 package miyucomics.scryglass.mixin;
 
-import miyucomics.scryglass.state.PlayerEntityMinterface;
-import miyucomics.scryglass.state.ScryglassState;
+import miyucomics.scryglass.misc.PlayerEntityMinterface;
+import miyucomics.scryglass.misc.ScryglassState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin implements PlayerEntityMinterface {
 	@Unique
@@ -40,6 +41,7 @@ public class PlayerEntityMixin implements PlayerEntityMinterface {
 	@Inject(method = "tick", at = @At("RETURN"))
 	public void updateClient(CallbackInfo ci) {
 		if (!((Entity) (Object) this).getWorld().isClient) {
+			//noinspection DataFlowIssue
 			scryglassState.push((ServerPlayerEntity) (Object) this);
 		}
 	}

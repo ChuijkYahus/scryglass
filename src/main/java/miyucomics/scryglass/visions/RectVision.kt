@@ -8,7 +8,7 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
 import org.joml.Vector3f
 
-class RectVision(visionType: VisionType<RectVision>) : Vision(visionType) {
+class RectVision(visionType: VisionType<RectVision>) : AbstractVision(visionType) {
 	private lateinit var position: Vector3f
 	private lateinit var size: Vector3f
 	private var color: Int = 0
